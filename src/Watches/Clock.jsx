@@ -11,6 +11,7 @@ function Clock({ time, onDelete }) {
 
   useEffect(() => {
     loadTime();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -19,6 +20,7 @@ function Clock({ time, onDelete }) {
     return () => {
       clearTimeout(timeout);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeZone]);
 
   return (
