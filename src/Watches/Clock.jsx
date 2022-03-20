@@ -3,25 +3,17 @@ import PropTypes from 'prop-types'
 import moment from "moment";
 
 function Clock({ time, onDelete }) {
-  const [timeZone, setTime] = useState('');
-
-  function loadTime() {
-    setTime(moment().utcOffset(Number(time.timeZone)).format("hh:mm:ss"));
-  };
+  const [timeZone, setTime] = useState(moment().utcOffset(Number(time.timeZone)).format("hh:mm:ss"));
 
   useEffect(() => {
-    loadTime();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    const timeout = setTimeout(loadTime, 1000);
+    const timeout = setTimeout(() => {
+      setTime(moment().utcOffset(Number(time.timeZone)).format("hh:mm:ss"))
+    }, 1000);
 
     return () => {
       clearTimeout(timeout);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeZone]);
+  }, [time.timeZone, timeZone]);
 
   return (
     <div>
