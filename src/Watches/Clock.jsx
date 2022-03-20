@@ -1,34 +1,45 @@
-import React, { useEffect, useState } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import moment from "moment";
 
-function Clock({ time, onDelete }) {
-  const [timeZone, setTime] = useState(moment().utcOffset(Number(time.timeZone)).format("hh:mm:ss"));
+export default class Clock extends Component {
+  constructor(props) {
+    super(props);
+    this.id = props.time.id;
+    this.name = props.time.name;
+    this.timeZone = Number(props.time.timeZone);
+    this.onDelete = props.onDelete;
+    this.state = {
+      timeZone: moment().utcOffset(this.timeZone).format('HH:mm:ss'),
+    };
+  }
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setTime(moment().utcOffset(Number(time.timeZone)).format("hh:mm:ss"))
-    }, 1000);
+  componentDidMount() {
+    this.interval = setInterval(() => this.tick(), 1000)
+  }
 
-    return () => {
-      clearTimeout(timeout);
-    }
-  }, [time.timeZone, timeZone]);
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
-  return (
-    <div>
-      <p>{time.name}</p>
-      <div className='clock'>
-        <p>{timeZone}</p>
-        <button className='btn-del' data-id={time.id} onClick={onDelete}>✘</button>
+  tick() {
+    this.setState({timeZone: moment().utcOffset(this.timeZone).format('HH:mm:ss')});
+  }
+
+  render() {
+    return (
+      <div>
+        <p>{this.name}</p>
+        <div className='clock'>
+          <p>{this.state.timeZone}</p>
+          <button className='btn-del' onClick={() => this.onDelete(this.id)}>✘</button>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 Clock.propTypes = {
   time: PropTypes.object,
   onDelete: PropTypes.func
 }
-
-export default Clock

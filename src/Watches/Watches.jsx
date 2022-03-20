@@ -6,8 +6,8 @@ import shortid from 'shortid';
 function Watches() {
   const [clocks, setClocks] = useState([]);
 
-  function onDelete({ target }) {
-    const copy = clocks.filter((e) => e.id !== target.dataset.id);
+  function onDelete(id) {
+    const copy = clocks.filter((e) => e.id !== id);
     setClocks(copy);
   }
 
